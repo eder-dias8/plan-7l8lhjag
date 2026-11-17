@@ -6,45 +6,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Velocidades de Decolagem | A320neo e A330-200</title>
 <style>
-:root{--azul:#0074C0;--laranja:#F37A19;--cinza:#95AFB6;--fundo:#f4f7f9;--texto:#1d2b33}
+/* Paleta dos displays Airbus (ECAM/PFD/MCDU): fundo preto, verde = valor calculado, ciano = dado editável/entrada,
+   magenta = alvo do FMS, âmbar = atenção, branco = rótulo */
+:root{--azul:#00FFFF;--laranja:#FFB000;--cinza:#7f8a93;--fundo:#000;--texto:#e8eef2;--verde:#00FF00;--magenta:#FF00FF;--painel:#0b1014;--borda:#26323a}
 *{box-sizing:border-box}
-body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--fundo);color:var(--texto)}
-header{background:var(--azul);color:#fff;padding:14px 20px}
-header h1{margin:0;font-size:20px}
-header p{margin:4px 0 0;font-size:13px;opacity:.9}
+body{margin:0;font-family:"Lucida Console",Consolas,"Courier New",monospace;background:var(--fundo);color:var(--texto)}
+header{background:var(--painel);border-bottom:2px solid var(--borda);padding:14px 20px}
+header h1{margin:0;font-size:18px;color:#fff;letter-spacing:1px;text-transform:uppercase}
+header p{margin:4px 0 0;font-size:12px;color:var(--cinza)}
 main{max-width:1000px;margin:0 auto;padding:16px}
 .abas{display:flex;gap:6px;margin-bottom:12px}
-.aba{padding:10px 18px;border:1px solid var(--cinza);background:#fff;cursor:pointer;border-radius:6px 6px 0 0;font-weight:600;color:var(--cinza)}
-.aba.ativa{background:var(--azul);color:#fff;border-color:var(--azul)}
-.cartao{background:#fff;border:1px solid #dbe5e9;border-radius:8px;padding:14px;margin-bottom:14px}
-.cartao h2{margin:0 0 10px;font-size:15px;color:var(--azul)}
-label{font-size:12px;color:#5b6b73;display:block;margin-bottom:3px}
-input[type=text],input[type=number],textarea{width:100%;padding:7px;border:1px solid var(--cinza);border-radius:4px;font-size:14px}
-textarea{height:80px;font-family:Consolas,monospace;font-size:12px}
+.aba{padding:9px 18px;border:1px solid var(--borda);background:var(--painel);cursor:pointer;color:var(--cinza);font-weight:700;letter-spacing:1px}
+.aba.ativa{color:#000;background:var(--verde);border-color:var(--verde)}
+.cartao{background:var(--painel);border:1px solid var(--borda);padding:14px;margin-bottom:14px}
+.cartao h2{margin:0 0 10px;font-size:13px;color:#fff;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--borda);padding-bottom:6px}
+label{font-size:11px;color:var(--cinza);display:block;margin-bottom:3px;text-transform:uppercase}
+input[type=text],input[type=number],textarea,input[type=file]{width:100%;padding:7px;border:1px solid var(--borda);background:#000;color:var(--azul);font-size:14px;font-family:inherit}
+textarea{height:80px;font-size:12px}
 .linha{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
 .linha>div{flex:1;min-width:130px}
-button{background:var(--azul);color:#fff;border:0;padding:8px 14px;border-radius:4px;cursor:pointer;font-size:14px}
-button.sec{background:#fff;color:var(--azul);border:1px solid var(--azul)}
+button{background:#000;color:var(--azul);border:1px solid var(--azul);padding:8px 14px;cursor:pointer;font-size:13px;font-family:inherit;text-transform:uppercase}
+button:hover{background:var(--azul);color:#000}
+button.sec{color:#fff;border-color:var(--cinza)}
 table{width:100%;border-collapse:collapse;font-size:14px}
-th{background:var(--azul);color:#fff;text-align:center;padding:7px}
-td{padding:7px;text-align:center;border-bottom:1px solid #e3ebee}
-td.v{font-size:20px;font-weight:700;color:var(--azul)}
-.aviso{background:#fff4ea;border-left:4px solid var(--laranja);padding:9px 12px;font-size:13px;margin:8px 0}
-.erro{background:#fdecea;border-left:4px solid #c62828;padding:9px 12px;font-size:13px;margin:8px 0}
-.ok{background:#eaf5fb;border-left:4px solid var(--azul);padding:9px 12px;font-size:13px;margin:8px 0}
+th{color:#fff;text-align:center;padding:7px;border-bottom:1px solid var(--cinza);font-weight:400;font-size:12px;text-transform:uppercase}
+td{padding:7px;text-align:center;border-bottom:1px solid var(--borda);color:var(--verde)}
+td.v{font-size:22px;font-weight:700;color:var(--verde)}
+.aviso{background:#1a1200;border-left:4px solid var(--laranja);color:var(--laranja);padding:9px 12px;font-size:13px;margin:8px 0}
+.erro{background:#1a0000;border-left:4px solid #ff2a2a;color:#ff5a5a;padding:9px 12px;font-size:13px;margin:8px 0}
+.ok{background:#001a1a;border-left:4px solid var(--azul);color:var(--azul);padding:9px 12px;font-size:13px;margin:8px 0}
 .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
-.kv div{background:var(--fundo);padding:8px;border-radius:4px;font-size:13px}
-.kv b{display:block;font-size:15px;color:var(--azul)}
-.sel{display:inline-block;background:var(--laranja);color:#fff;font-size:11px;padding:1px 6px;border-radius:8px;margin-left:4px}
-pre{background:#10222c;color:#d9ecf5;padding:10px;border-radius:6px;font-size:12px;white-space:pre-wrap}
-small{color:#5b6b73}
+.kv div{background:#000;border:1px solid var(--borda);padding:8px;font-size:11px;color:var(--cinza);text-transform:uppercase}
+.kv b{display:block;font-size:15px;color:var(--verde);text-transform:none}
+.sel{display:inline-block;background:var(--magenta);color:#000;font-size:10px;padding:1px 6px;margin-left:4px}
+pre{background:#000;color:var(--verde);border:1px solid var(--borda);padding:10px;font-size:12px;white-space:pre-wrap}
+small{color:var(--cinza)}
 .oculto{display:none}
+/* Réplica da página TAKE OFF do MCDU Airbus */
+.mcdu{width:340px;max-width:100%;background:#000;border:3px solid #3a444c;border-radius:6px;padding:10px 14px;font-size:16px;line-height:1.15;margin:0 auto 10px}
+.mcdu .tit{text-align:center;color:#fff;margin-bottom:6px}
+.mcdu .tit span{color:var(--verde)}
+.mcdu .par{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}
+.mcdu .rot{font-size:11px;color:#fff}
+.mcdu .dir{text-align:right}
+.mcdu .val{font-size:20px;color:var(--azul);margin-bottom:6px;min-height:24px}
+.mcdu .val.g{color:var(--verde)}
+.mcdu .val.m{color:var(--magenta)}
 </style>
 </head>
 <body>
 <header>
   <h1>Velocidades de Decolagem a partir do plano do SimBrief</h1>
-  <p>A320neo (A20N) e iniBuilds A330-200 (A332). Uso apenas em simulador, não operacional.</p>
+  <p>A320neo (A20N) e iniBuilds A330-200 (A332). Visual dos displays Airbus. Uso apenas em simulador, não operacional.</p>
 </header>
 <main>
   <div class="abas" id="abas"></div>
@@ -188,6 +201,15 @@ function processar(ofp){
       +'<div>Temperatura<b>'+(cond.temperature||"-")+'</b></div>'
       +'<div>QNH<b>'+(cond.altimeter||"-")+'</b></div>'
       +'<div>Superfície<b>'+(cond.surface_condition||"-")+'</b></div></div>';
+
+    {const p0=pistas.find(r=>String(r.identifier||r.name||"")===String(cond.planned_runway||""))||pistas[0];
+     const v0=extrairVelocidades(p0);
+     const fl=String(p0.flap_setting||"").replace(/CONF\s*/i,"");
+     html += '<div class="mcdu"><div class="tit">TAKE OFF <span>RWY '+(cond.planned_runway||p0.identifier||"--")+'</span></div>'
+      +'<div class="par"><div><div class="rot">V1</div><div class="val">'+(v0.v1??"---")+'</div></div><div class="dir"><div class="rot">FLAPS</div><div class="val">'+(fl||"-")+'</div></div>'
+      +'<div><div class="rot">VR</div><div class="val">'+(v0.vr??"---")+'</div></div><div class="dir"><div class="rot">THR</div><div class="val g">'+(p0.thrust_setting||"-")+'</div></div>'
+      +'<div><div class="rot">V2</div><div class="val">'+(v0.v2??"---")+'</div></div><div class="dir"><div class="rot">FLEX TO TEMP</div><div class="val">'+(p0.flex_temperature?p0.flex_temperature+"°":"-")+'</div></div>'
+      +'<div><div class="rot">TOW</div><div class="val g">'+(w.est_tow||"-")+'</div></div><div class="dir"><div class="rot">QNH</div><div class="val g">'+(cond.altimeter||"-")+'</div></div></div></div>';}
     html += '<table style="margin-top:10px"><tr><th>Pista</th><th>Flap</th><th>Empuxo</th><th>Flex °C</th><th>Peso máx.</th><th>V1</th><th>VR</th><th>V2</th><th>Outra</th></tr>';
     pistas.forEach(r=>{
       const v = extrairVelocidades(r);
