@@ -85,6 +85,66 @@
   .perna { position:absolute; transform:translate(-50%, -50%); background:rgba(255,255,255,.92); color:#35465e; font:600 10px Segoe UI, Arial; padding:0 5px; border-radius:8px; white-space:nowrap; border:1px solid #cfd8e3; }
   .zoom-baixo .perna { display:none; }
   button.ctl-ajustar { width:30px; height:30px; margin:0; padding:0; background:#fff; color:#333; border:2px solid rgba(0,0,0,.2); border-radius:4px; font-size:16px; cursor:pointer; }
+
+  /* ===== Visual aproximado do Flight Planner do MSFS (só estilo, código próprio) ===== */
+  #menu { width:172px; min-width:172px; }
+  #menu button { font-size:13px; padding:10px 12px; border:1px solid transparent; }
+  #painel { width:480px; min-width:480px; }
+  .cabeca-rota { display:flex; align-items:center; gap:10px; font:700 15px Consolas, monospace; padding:2px 0 10px; border-bottom:1px solid var(--linha); margin-bottom:10px; flex-wrap:nowrap; }
+  .cabeca-rota .ap { color:#fff; letter-spacing:.04em; }
+  .cabeca-rota .traco { width:34px; height:2px; background:var(--suave); position:relative; flex:none; }
+  .cabeca-rota .traco::after { content:""; position:absolute; right:-3px; top:-3px; width:8px; height:8px; border-radius:50%; background:var(--suave); }
+  .cabeca-rota .dist { font-weight:600; color:#dbe7f7; margin-left:6px; white-space:nowrap; }
+  .cabeca-rota .tempo { margin-left:auto; font-weight:600; color:#dbe7f7; white-space:nowrap; }
+  .cabeca-rota .fechar { margin:0; padding:2px 8px; background:transparent; color:var(--suave); font-size:16px; }
+  .cabeca-rota .fechar:hover { color:#fff; }
+  .cabeca-rota .titulo { font:600 14px "Segoe UI", Arial; color:#e8eef6; }
+  .barra-ifr { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .seg { display:inline-flex; border-radius:5px; overflow:hidden; border:1px solid var(--linha); }
+  .seg button { margin:0; border-radius:0; background:#243149; color:#cfd9e8; padding:6px 12px; font:600 12px Consolas, monospace; }
+  .seg button.ativo { background:var(--azul); color:#fff; }
+  .barra-ifr .rot-alt { font:700 12px Consolas, monospace; color:#dbe7f7; margin-left:6px; }
+  .barra-ifr select { padding:5px 6px; background:#121a28; }
+  .barra-ifr input { width:96px; padding:6px 8px; font:600 13px Consolas, monospace; }
+  .barra-ifr input:disabled, .barra-ifr select:disabled { opacity:.5; }
+  details.sec-col { margin:6px 0; border-top:1px solid var(--linha); padding-top:6px; }
+  details.sec-col summary { color:#dbe7f7; font:600 11px Consolas, monospace; letter-spacing:.04em; text-transform:none; cursor:pointer; }
+  details.sec-col .corpo { padding:8px 2px 2px; }
+  .rec { font:12px Consolas, monospace; padding:6px 8px; border-radius:5px; cursor:pointer; background:#121a28; margin:4px 0; word-break:break-word; color:#c8d4e5; }
+  .rec:hover { background:var(--painel2); }
+  #rotaTxt { background:#0d1420; border-color:#2a3650; font-size:13px; line-height:1.5; }
+  .cab-tabela, .linha { grid-template-columns:minmax(0,1fr) 46px 38px 66px 46px 52px 22px; }
+  .cab-tabela { font:600 11px Consolas, monospace; text-transform:none; color:#c8d4e5; border-bottom:1px solid var(--linha); }
+  .cab-tabela span small { display:block; font-weight:400; color:var(--suave); font-size:9px; }
+  .linha { min-height:34px; background:#161f30; margin:3px 0; border-radius:6px; }
+  .linha:hover { background:var(--painel2); }
+  .linha span:not(.id) { font-size:12px; }
+  button.mais { margin:0; padding:2px 6px; background:transparent; color:var(--suave); font-size:15px; line-height:1; }
+  button.mais:hover { color:#fff; background:#2b3750; }
+  .tit-col { cursor:pointer; user-select:none; }
+  .tit-col::before { content:"\25BE"; display:inline-block; margin-right:4px; font-size:11px; transition:transform .12s; }
+  .tit-col.fechado::before { transform:rotate(-90deg); }
+  #menuLinha { position:fixed; z-index:4000; background:#1b2433; border:1px solid var(--linha); border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,.5); display:none; min-width:170px; }
+  #menuLinha div { padding:8px 12px; font-size:12px; cursor:pointer; } #menuLinha div:hover { background:var(--painel2); }
+  .tab-resumo { width:100%; border-collapse:collapse; margin:6px 0 10px; } .tab-resumo td { padding:6px 4px; border-bottom:1px solid var(--linha); font-size:12px; }
+  .tab-resumo td:last-child { text-align:right; font-family:Consolas, monospace; color:#fff; }
+  .tab-resumo tr.tot td { font-weight:700; color:var(--amarelo); border-bottom:0; }
+  .grade2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  #caderno { width:100%; min-height:340px; font-family:Consolas, monospace; }
+  /* Barra de ferramentas à direita do mapa */
+  #ferramentas { position:absolute; top:12px; right:12px; z-index:1000; display:flex; flex-direction:column; gap:6px; }
+  #ferramentas button { width:36px; height:36px; margin:0; padding:0; background:#1b2433; color:#dbe7f7; border:1px solid #33425e; border-radius:7px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,.35); }
+  #ferramentas button:hover { background:#2b3750; }
+  #ferramentas button.ativo { background:var(--azul); color:#fff; }
+  #ferramentas svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  #popCamadas { position:absolute; top:12px; right:58px; z-index:1001; background:#1b2433; color:#e8eef6; border:1px solid #33425e; border-radius:8px; padding:10px 12px; display:none; min-width:230px; box-shadow:0 4px 14px rgba(0,0,0,.5); }
+  #popCamadas h5 { margin:8px 0 4px; font-size:11px; letter-spacing:.05em; color:var(--suave); text-transform:uppercase; } #popCamadas h5:first-child { margin-top:0; }
+  #popCamadas label { display:block; margin:3px 0; text-transform:none; letter-spacing:0; font-size:12px; color:#e8eef6; cursor:pointer; }
+  #busca .atalho { position:absolute; right:10px; top:50%; transform:translateY(-50%); font:11px Consolas, monospace; color:var(--suave); border:1px solid var(--linha); border-radius:4px; padding:1px 5px; pointer-events:none; }
+  #busca input { padding-right:78px; }
+  .leaflet-container.regua { cursor:crosshair; }
+  .leaflet-control-zoom a { background:#1b2433 !important; color:#dbe7f7 !important; border-color:#33425e !important; }
+  .rot-regua { background:#1b2433; color:#fff; border:1px solid #33425e; font:700 11px Consolas, monospace; padding:2px 6px; border-radius:4px; white-space:nowrap; }
   img.carta-mapa { position:absolute; left:0; top:0; transform-origin:0 0; max-width:none !important; pointer-events:none; }
   #modal { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:3000; display:flex; align-items:center; justify-content:center; }
   #modal[hidden] { display:none; }
@@ -112,28 +172,109 @@
 <nav id="menu">
   <div class="marca">Planejador de Rotas<small>para simulador de voo</small></div>
   <button class="ativo" data-aba="rota">Rota</button>
-  <button data-aba="cartas">Cartas</button>
+  <button data-aba="performance">Desempenho</button>
+  <button data-aba="detalhes">Detalhes do voo</button>
+  <button data-aba="combustivel">Combustível e carga</button>
   <button data-aba="briefing">Briefing</button>
+  <button data-aba="cartas">Cartas</button>
   <button data-aba="opcoes">Opções</button>
+  <button data-aba="caderno">Caderno</button>
   <div class="rodape">Só para simulação, nunca para navegação real.</div>
 </nav>
 
 <aside id="painel">
   <!-- ===== Aba Rota ===== -->
   <section class="aba ativa" id="aba-rota">
-    <div id="resumo"><span>Cole uma rota para começar</span></div>
-    <div class="duplo">
-      <div><label for="velKt">Velocidade (kt)</label><input type="number" id="velKt" value="450" min="60" max="700"></div>
-      <div><label for="nivel">Nível de voo</label><input type="text" id="nivel" placeholder="ex.: A250" ></div>
+    <div id="resumo" class="cabeca-rota"><span class="titulo">Cole uma rota para começar</span></div>
+    <div class="barra-ifr">
+      <div class="seg" id="segModo"><button class="ativo" data-modo="IFR">IFR</button><button data-modo="VFR">VFR</button></div>
+      <span class="rot-alt">Altitude de cruzeiro</span>
+      <select id="altTipo"><option value="manual">Manual</option><option value="plano">Do plano</option></select>
+      <select id="altUnid"><option value="FT">FT</option><option value="FL">FL</option></select>
+      <input type="number" id="altValor" min="0" step="100" placeholder="31000">
     </div>
+    <input type="hidden" id="nivel">
+    <details class="sec-col" open>
+      <summary>Opções de desempenho</summary>
+      <div class="corpo"><div class="grade2"><div><label for="velKt">Velocidade (kt)</label><input type="number" id="velKt" value="450" min="60" max="700"></div></div>
+      <div class="peq">Tempo a velocidade constante, sem vento, subida ou descida. Mais detalhes na aba Desempenho.</div></div>
+    </details>
+    <details class="sec-col">
+      <summary>Rotas recentes <span id="nRecentes">(0)</span></summary>
+      <div class="corpo" id="recentes"></div>
+    </details>
     <label for="rotaTxt">Rota (cole a do Rotas Reais ou digite)</label>
-    <textarea id="rotaTxt" rows="2" placeholder="SBUL VALAP UZ25 PABIN SBBR" spellcheck="false"></textarea>
+    <textarea id="rotaTxt" rows="3" placeholder="SBUL VALAP UZ25 PABIN SBBR" spellcheck="false"></textarea>
     <div id="chips"></div>
     <button id="btnCalcular">Calcular rota</button><button id="btnLimpar" class="sec">Limpar</button>
     <div id="avisos"></div>
-    <div class="cab-tabela"><span>Ident</span><span>Hdg</span><span>Dist NM</span><span>Tempo</span></div>
+    <div class="cab-tabela"><span>Ident</span><span>Tempo<small>H:MIN</small></span><span>Vel<small>KT</small></span><span>Alt<small>FT/FL</small></span><span>Rumo</span><span>Dist<small>NM</small></span><span></span></div>
     <div id="tabela"><div class="peq">Nenhuma rota ainda.</div></div>
     <div id="acoes"></div>
+  </section>
+
+  <!-- ===== Aba Desempenho ===== -->
+  <section class="aba" id="aba-performance">
+    <h3>Desempenho da rota</h3>
+    <div class="grade2">
+      <div><label for="perfVel">Velocidade de cruzeiro (kt)</label><input type="number" id="perfVel" min="60" max="700"></div>
+      <div><label>Altitude de cruzeiro</label><div id="perfAlt" class="mono" style="padding:8px 0;font-family:Consolas,monospace">-----</div></div>
+    </div>
+    <table class="tab-resumo" id="perfTab"></table>
+    <details><summary>Memória de cálculo</summary>
+      <p><b>Distância pela rota:</b> soma das pernas (Haversine) da origem ao destino, passando por SID, aerovias, STAR.</p>
+      <p><b>Distância direta:</b> Haversine entre origem e destino. <b>Acréscimo:</b> (rota ÷ direta − 1) × 100.</p>
+      <p><b>Tempo:</b> distância pela rota ÷ velocidade. Exemplo: 1290 NM ÷ 450 kt = 2,87 h = 2 h 52 min. Não considera vento, subida nem descida.</p>
+    </details>
+  </section>
+
+  <!-- ===== Aba Detalhes do voo ===== -->
+  <section class="aba" id="aba-detalhes">
+    <h3>Detalhes do voo</h3>
+    <div class="grade2">
+      <div><label for="fdCia">Companhia (ICAO)</label><input type="text" id="fdCia" placeholder="TAM" maxlength="3"></div>
+      <div><label for="fdNum">Número do voo</label><input type="text" id="fdNum" placeholder="4776"></div>
+      <div><label for="fdAeronave">Aeronave (ICAO)</label><input type="text" id="fdAeronave" placeholder="B789" maxlength="4"></div>
+      <div><label for="fdData">Data do voo</label><input type="text" id="fdData" placeholder="AAAA-MM-DD" maxlength="10"></div>
+      <div><label for="fdHora">Saída (UTC)</label><input type="text" id="fdHora" placeholder="03:05" maxlength="5"></div>
+    </div>
+    <table class="tab-resumo" id="detTab"></table>
+    <div id="detLinks"></div>
+    <details><summary>Memória de cálculo</summary>
+      <p><b>ETA (UTC):</b> saída informada + tempo de rota. Exemplo: 03:05 + 2 h 52 min = 05:57 UTC.</p>
+      <p><b>Link do SimBrief:</b> envia companhia, número, aeronave, origem, destino, hora de saída em UTC, tempo em rota e a rota (sem DCT solto no começo ou no fim). O nível de cruzeiro você ajusta no SimBrief.</p>
+    </details>
+  </section>
+
+  <!-- ===== Aba Combustível e carga ===== -->
+  <section class="aba" id="aba-combustivel">
+    <h3>Combustível e carga</h3>
+    <p class="peq">Valores do seu avião. Os números abaixo são exemplos editáveis, não dados oficiais de nenhuma aeronave.</p>
+    <div class="grade2">
+      <div><label for="cbConsumo">Consumo médio (kg/h)</label><input type="number" id="cbConsumo" value="2500" min="0"></div>
+      <div><label for="cbTaxi">Taxi (kg)</label><input type="number" id="cbTaxi" value="150" min="0"></div>
+      <div><label for="cbConting">Contingência (%)</label><input type="number" id="cbConting" value="5" min="0"></div>
+      <div><label for="cbAltern">Alternativa (min)</label><input type="number" id="cbAltern" value="30" min="0"></div>
+      <div><label for="cbReserva">Reserva final (min)</label><input type="number" id="cbReserva" value="30" min="0"></div>
+      <div><label for="cbOew">Peso operacional vazio (kg)</label><input type="number" id="cbOew" value="42000" min="0"></div>
+      <div><label for="cbPax">Passageiros</label><input type="number" id="cbPax" value="150" min="0"></div>
+      <div><label for="cbPesoPax">Peso por passageiro (kg)</label><input type="number" id="cbPesoPax" value="84" min="0"></div>
+      <div><label for="cbCarga">Carga (kg)</label><input type="number" id="cbCarga" value="1500" min="0"></div>
+    </div>
+    <table class="tab-resumo" id="cbTab"></table>
+    <details><summary>Memória de cálculo</summary>
+      <p><b>Viagem</b> = tempo de rota (h) × consumo. <b>Contingência</b> = viagem × %. <b>Alternativa</b> e <b>Reserva</b> = minutos ÷ 60 × consumo. <b>Combustível total</b> = viagem + contingência + alternativa + reserva + taxi.</p>
+      <p><b>Carga paga</b> = passageiros × peso por passageiro + carga. <b>ZFW</b> = peso vazio + carga paga. <b>TOW</b> = ZFW + combustível total − taxi.</p>
+      <p>Exemplo: 2,87 h × 2500 = 7188 kg de viagem; 5% = 359 kg; 30 min = 1250 kg cada (alternativa e reserva); taxi 150 kg; total 10 197 kg.</p>
+    </details>
+  </section>
+
+  <!-- ===== Aba Caderno ===== -->
+  <section class="aba" id="aba-caderno">
+    <h3>Caderno do voo</h3>
+    <textarea id="caderno" placeholder="Anotações do voo: frequências, ATIS, pista em uso, alternativa..." spellcheck="false"></textarea>
+    <button id="btnCadResumo" class="sec">Inserir resumo da rota</button><button id="btnCadCopiar" class="sec">Copiar</button>
+    <div class="peq">As notas ficam salvas neste navegador.</div>
   </section>
 
   <!-- ===== Aba Cartas ===== -->
@@ -192,7 +333,7 @@
 
 <div id="mapa">
   <div id="busca">
-    <input type="text" id="campoBusca" placeholder="Buscar aeroporto, fixo ou aerovia (Ctrl+K)" autocomplete="off">
+    <input type="text" id="campoBusca" placeholder="Digite para buscar aeroporto, fixo ou aerovia" autocomplete="off"><span class="atalho">Ctrl+K</span>
     <div id="resBusca"></div>
   </div>
 </div>
@@ -296,19 +437,14 @@ const fundos = {
   "Relevo (OpenTopoMap)": L.tileLayer("https://a.tile.opentopomap.org/{z}/{x}/{y}.png", { attribution: "© OpenTopoMap, © OpenStreetMap", maxZoom: 17 }),
   "Satélite (Esri)": esri("World_Imagery", 18)
 };
-fundos["Escuro (Esri)"].addTo(mapa);
-mapa.getContainer().classList.add("mapa-escuro");
-L.control.layers(fundos).addTo(mapa);
-// Rótulos claros sobre fundo escuro e escuros sobre fundo claro
-mapa.on("baselayerchange", e => mapa.getContainer().classList.toggle("mapa-escuro", /Escuro|Sat/.test(e.name)));
-// Botão para ajustar o mapa à rota
-const ControleAjustar = L.Control.extend({
-  onAdd() {
-    const b = L.DomUtil.create("button", "ctl-ajustar"); b.textContent = "⤢"; b.title = "Ajustar à rota";
-    L.DomEvent.disableClickPropagation(b); b.onclick = () => ajustarVista(); return b;
-  }
-});
-new ControleAjustar({ position: "topleft" }).addTo(mapa);
+let fundoAtual = "Cinza claro (Esri)";
+fundos[fundoAtual].addTo(mapa);
+function trocarFundo(nome) {
+  if (nome === fundoAtual) return;
+  fundos[fundoAtual].remove(); fundos[nome].addTo(mapa); fundoAtual = nome;
+  mapa.getContainer().classList.toggle("mapa-escuro", /Escuro|Sat/.test(nome));
+}
+mapa.zoomControl.setPosition("bottomright");
 mapa.on("zoomend", () => mapa.getContainer().classList.toggle("zoom-baixo", mapa.getZoom() < 7));
 
 // ====== Base de aeroportos ======
@@ -811,7 +947,7 @@ function calcularPlano() {
     grupoVelNivel = lido.grupo;
     const m = /^([NKM])(\d{3,4})([AFSM])(\d{3,4})$/.exec(lido.grupo);
     if (m && m[1] === "N") $("velKt").value = parseInt(m[2], 10);
-    if (m) $("nivel").value = m[3] + m[4];
+    if (m) { $("nivel").value = m[3] + m[4]; $("altTipo").value = "plano"; ajustarCamposAlt(); }
   }
   $("rotaTxt").value = lido.rota;
   tokensAtuais = lerTokensRota(lido.rota);
@@ -839,11 +975,16 @@ function calcularPlano() {
 }
 
 // Recalcula a sequência (depois de trocar SID, STAR ou velocidade) e redesenha
+let modoVfr = false;
 function renderTudo(ajustar) {
+  // Em VFR não entram SID nem STAR
+  if (modoVfr) { selSid = "nenhum"; selStar = "nenhum"; }
   sequencia = montarSequencia();
   const total = calcularPernas(sequencia, velocidadeAtual());
   sequencia._total = total;
   renderChips(); renderResumo(); renderTabela(); renderAcoes(); desenharPlano(ajustar);
+  if (sequencia.length >= 2 && tokensAtuais.length >= 2) guardarRecente(tokensAtuais.join(" "));
+  atualizarExtras();
   if ($("aba-briefing").classList.contains("ativa")) renderBriefing();
   if ($("aba-cartas").classList.contains("ativa")) renderLinksCartas();
 }
@@ -865,10 +1006,14 @@ function renderChips() {
 
 function renderResumo() {
   const el = $("resumo");
-  if (sequencia.length < 2) { el.innerHTML = "<span>Cole uma rota para começar</span>"; return; }
+  if (sequencia.length < 2) { el.innerHTML = '<span class="titulo">Cole uma rota para começar</span>'; return; }
   const a = sequencia[0], b = sequencia[sequencia.length - 1], t = sequencia._total;
-  el.innerHTML = `<span>${esc(a.ident)} → ${esc(b.ident)}</span><span>${fmtDist(t)} NM</span><span>${fmtTempo(t / velocidadeAtual() * 60)}</span>` +
-    `<span class="rotulo">a ${Math.round(velocidadeAtual())} kt, sem vento</span>`;
+  const direta = distanciaNM(a.lat, a.lon, b.lat, b.lon);
+  const pct = direta > 0 ? " (" + (t / direta - 1 >= 0 ? "+" : "") + ((t / direta - 1) * 100).toFixed(1) + "%)" : "";
+  const min = Math.round(t / velocidadeAtual() * 60);
+  el.innerHTML = `<span class="ap">${esc(a.ident)}</span><span class="traco"></span><span class="ap">${esc(b.ident)}</span>` +
+    `<span class="dist">${fmtDist(t)} NM${pct}</span><span class="tempo">${Math.floor(min / 60)} h ${min % 60} min</span>` +
+    `<button class="fechar" id="btnFechar" title="Limpar rota">✕</button>`;
 }
 
 function htmlSeletor(id, cands, sel) {
@@ -878,41 +1023,66 @@ function htmlSeletor(id, cands, sel) {
   return `<select id="${id}">${opcoes.join("")}</select>`;
 }
 
+// Altitude de cruzeiro mostrada na tabela (do plano ou manual, em FT ou FL)
+function altCruzeiroTxt() {
+  if ($("altTipo").value === "plano") {
+    const m = /^[AF](\d{3,4})$/.exec($("nivel").value.trim().toUpperCase());
+    return m ? "FL" + String(parseInt(m[1], 10)).padStart(3, "0") : "";
+  }
+  const v = parseInt($("altValor").value, 10);
+  if (!v) return "";
+  return $("altUnid").value === "FL" ? "FL" + String(v).padStart(3, "0") : String(v);
+}
+const colapsados = new Set();
+function aplicarColapso() {
+  document.querySelectorAll("#tabela .linha").forEach(l => { l.style.display = colapsados.has(l.dataset.k) ? "none" : ""; });
+  document.querySelectorAll("#tabela .tit-col").forEach(t => t.classList.toggle("fechado", colapsados.has(t.dataset.k)));
+}
+
 // Tabela da rota, em seções: origem, saída, fixos por aerovia, chegada e destino
 function renderTabela() {
   const el = $("tabela");
   const seq = sequencia;
   $("avisos").innerHTML = avisosRota.map(a => `<div class="aviso">${esc(a)}</div>`).join("");
   if (seq.length < 2) { el.innerHTML = '<div class="peq">Nenhuma rota ainda.</div>'; return; }
-  const linha = (p, i, classe) => `<div class="linha i-${classe}" data-i="${i}"><span class="id"><i></i>${esc(p.ident)}</span><span>${fmtRumo(p.hdg)}</span><span>${i === 0 ? "-----" : fmtDist(p.dist)}</span><span>${fmtTempo(p.ete)}</span></div>`;
+  const alt = altCruzeiroTxt();
+  const vel = Math.round(velocidadeAtual());
+  let k = "origem";
+  const linha = (p, i, classe) => `<div class="linha i-${classe}" data-i="${i}" data-k="${esc(k)}"><span class="id"><i></i>${esc(p.ident)}</span>` +
+    `<span>${i === 0 ? "--:--" : fmtTempo(p.ete)}</span><span>${i === 0 ? "---" : vel}</span><span>${p.secao === "rota" && alt ? esc(alt) : "-----"}</span>` +
+    `<span>${fmtRumo(p.hdg)}</span><span>${i === 0 ? "-----" : fmtDist(p.dist)}</span><button class="mais" data-i="${i}" title="Opções do ponto">⋮</button></div>`;
   let html = "";
   seq.forEach((p, i) => {
     const ant = seq[i - 1];
     if (p.secao === "origem") {
+      k = "origem";
       const ap = baseAeroportos[p.ident];
-      html += `<div class="sec-tit origem">Origem <small>${esc(ap ? ap.nome : "")}</small></div>`;
+      html += `<div class="sec-tit origem tit-col" data-k="${k}">Origem <small>${esc(ap ? ap.nome : "")}</small></div>`;
     } else if (p.secao === "saida") {
       if (!ant || ant.secao !== "saida") {
+        k = "saida";
         const nome = seq._sid ? seq._sid.p.n : "";
-        html += `<div class="sec-tit saida">Saída <small>${esc(nome)}</small>${htmlSeletor("selSid", candSids, selSid)}</div>`;
+        html += `<div class="sec-tit saida tit-col" data-k="${k}">Saída <small>${esc(nome)}</small>${htmlSeletor("selSid", candSids, selSid)}</div>`;
       }
     } else if (p.secao === "rota") {
       const grupo = p.via || "";
       const antGrupo = (ant && ant.secao === "rota") ? (ant.via || "") : null;
-      if (antGrupo === null || antGrupo !== grupo) html += `<div class="grupo ${grupo ? "" : "dct"}">${esc(grupo || "DCT")}</div>`;
+      if (antGrupo === null || antGrupo !== grupo) { k = "via:" + (grupo || "DCT"); html += `<div class="grupo ${grupo ? "" : "dct"} tit-col" data-k="${esc(k)}">${esc(grupo || "DCT")}</div>`; }
     } else if (p.secao === "chegada") {
       if (!ant || ant.secao !== "chegada") {
+        k = "chegada";
         const nome = seq._star ? seq._star.p.n : "";
-        html += `<div class="sec-tit chegada">Chegada <small>${esc(nome)}</small>${htmlSeletor("selStar", candStars, selStar)}</div>`;
+        html += `<div class="sec-tit chegada tit-col" data-k="${k}">Chegada <small>${esc(nome)}</small>${htmlSeletor("selStar", candStars, selStar)}</div>`;
       }
     } else if (p.secao === "destino") {
+      k = "destino";
       const ap = baseAeroportos[p.ident];
-      html += `<div class="sec-tit destino">Destino <small>${esc(ap ? ap.nome : "")}</small></div>`;
+      html += `<div class="sec-tit destino tit-col" data-k="${k}">Destino <small>${esc(ap ? ap.nome : "")}</small></div>`;
     }
     html += linha(p, i, p.secao === "rota" && !p.via ? "dct" : p.secao);
   });
   // Quando há procedimentos disponíveis mas nenhum foi escolhido, mantém o seletor visível
-  if (!seq.some(p => p.secao === "saida") && candSids.length) html = html.replace('<div class="sec-tit origem">', '<div class="peq">SIDs ligados: ' + candSids.length + ' (selecione abaixo)</div><div class="sec-tit origem">');
+  if (!seq.some(p => p.secao === "saida") && candSids.length) html = html.replace('<div class="sec-tit origem tit-col" data-k="origem">', '<div class="peq">SIDs ligados: ' + candSids.length + ' (selecione abaixo)</div><div class="sec-tit origem tit-col" data-k="origem">');
   el.innerHTML = html;
   const seletorSid = !seq.some(p => p.secao === "saida") && candSids.length;
   const seletorStar = !seq.some(p => p.secao === "chegada") && candStars.length;
@@ -922,6 +1092,7 @@ function renderTabela() {
     if (seletorStar) extra += `<div class="sec-tit chegada">Chegada <small>nenhuma escolhida</small>${htmlSeletor("selStar", candStars, selStar)}</div>`;
     el.insertAdjacentHTML("beforeend", extra);
   }
+  aplicarColapso();
 }
 
 // Botões de copiar e SimBrief
@@ -934,8 +1105,7 @@ function renderAcoes() {
   const rotaLnm = (mg && pontosRota[0] && pontosRota[0].aeroporto) ? [tokensRota[0], grupoVelNivel, ...tokensRota.slice(1)].join(" ") : "";
   const a = sequencia[0], b = sequencia[sequencia.length - 1];
   const meio = tokensRota.slice(1, -1).join(" ");
-  const simbrief = (a.aeroporto && b.aeroporto)
-    ? "https://dispatch.simbrief.com/options/custom?type=A320&orig=" + a.ident + "&dest=" + b.ident + (meio ? "&route=" + encodeURIComponent(meio) : "") : "";
+  const simbrief = linkSimbrief();
   el.innerHTML = `<div style="margin-top:12px">` +
     `<button class="sec" data-copiar="${esc(rotaTxt)}">Copiar rota</button>` +
     `<button class="sec" data-copiar="${esc(soFixos)}">Copiar só fixos</button>` +
@@ -1100,6 +1270,7 @@ function mostrarAba(nome) {
   document.querySelectorAll(".aba").forEach(a => a.classList.toggle("ativa", a.id === "aba-" + nome));
   if (nome === "briefing") renderBriefing();
   if (nome === "cartas") renderLinksCartas();
+  if (["performance", "detalhes", "combustivel"].includes(nome)) atualizarExtras();
 }
 document.querySelectorAll("#menu button[data-aba]").forEach(b => b.addEventListener("click", () => mostrarAba(b.dataset.aba)));
 
@@ -1130,6 +1301,10 @@ $("tabela").addEventListener("change", e => {
   if (e.target.id === "selStar") { selStar = e.target.value; renderTudo(false); }
 });
 $("tabela").addEventListener("click", e => {
+  const t = e.target.closest(".tit-col");
+  if (t && !e.target.closest("select")) { const k = t.dataset.k; if (colapsados.has(k)) colapsados.delete(k); else colapsados.add(k); aplicarColapso(); return; }
+  const mais = e.target.closest("button.mais");
+  if (mais) { abrirMenuLinha(mais); return; }
   const l = e.target.closest(".linha");
   if (l) centrarPonto(+l.dataset.i);
 });
@@ -1198,6 +1373,215 @@ try {
   $("infoNav").textContent = descreverNavdata(origem);
   if (baseOk && $("rotaTxt").value.trim()) calcularPlano();
 })();
+
+
+// ====== Estilo Flight Planner do MSFS: modo IFR/VFR, altitude, recentes, abas extras e barra do mapa ======
+const MESES = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+const MESES_SB = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+function lerRecentes() { try { return JSON.parse(localStorage.getItem("planejador_recentes") || "[]"); } catch (e) { return []; } }
+function guardarRecente(txt) {
+  if (!txt) return;
+  let l = lerRecentes();
+  if (l[0] === txt) return;
+  l = [txt].concat(l.filter(x => x !== txt)).slice(0, 8);
+  try { localStorage.setItem("planejador_recentes", JSON.stringify(l)); } catch (e) { /* sem armazenamento */ }
+  renderRecentes();
+}
+function renderRecentes() {
+  const l = lerRecentes();
+  $("nRecentes").textContent = "(" + l.length + ")";
+  $("recentes").innerHTML = l.length ? l.map((t, i) => `<div class="rec" data-i="${i}">${esc(t)}</div>`).join("") : '<div class="peq">Nenhuma rota calculada ainda.</div>';
+}
+$("recentes").addEventListener("click", e => {
+  const d = e.target.closest(".rec");
+  if (!d) return;
+  $("rotaTxt").value = lerRecentes()[+d.dataset.i]; grupoVelNivel = "";
+  calcularPlano();
+});
+
+// Campos que ficam salvos neste navegador
+const CAMPOS_SALVOS = ["altTipo", "altUnid", "altValor", "fdCia", "fdNum", "fdAeronave", "fdData", "fdHora",
+  "cbConsumo", "cbTaxi", "cbConting", "cbAltern", "cbReserva", "cbOew", "cbPax", "cbPesoPax", "cbCarga"];
+try { CAMPOS_SALVOS.forEach(id => { const v = localStorage.getItem("planejador_" + id); if (v !== null) $(id).value = v; }); } catch (e) { /* sem armazenamento */ }
+CAMPOS_SALVOS.forEach(id => $(id).addEventListener("input", () => {
+  try { localStorage.setItem("planejador_" + id, $(id).value); } catch (e) { /* sem armazenamento */ }
+  if (["altTipo", "altUnid", "altValor"].includes(id)) { ajustarCamposAlt(); if (sequencia.length >= 2) renderTudo(false); }
+  atualizarExtras();
+}));
+function ajustarCamposAlt() {
+  const plano = $("altTipo").value === "plano";
+  $("altUnid").disabled = plano; $("altValor").disabled = plano;
+  $("altValor").placeholder = plano ? (altCruzeiroTxt() || "plano") : ($("altUnid").value === "FL" ? "310" : "31000");
+}
+ajustarCamposAlt();
+
+// IFR e VFR
+$("segModo").addEventListener("click", e => {
+  const b = e.target.closest("button[data-modo]");
+  if (!b) return;
+  modoVfr = b.dataset.modo === "VFR";
+  document.querySelectorAll("#segModo button").forEach(x => x.classList.toggle("ativo", x === b));
+  if (!modoVfr) { selSid = "auto"; selStar = "auto"; }
+  if (sequencia.length >= 2) renderTudo(false);
+});
+$("resumo").addEventListener("click", e => { if (e.target.closest("#btnFechar")) $("btnLimpar").click(); });
+
+// Velocidade no painel de desempenho acompanha a do painel da rota
+$("perfVel").addEventListener("input", () => { $("velKt").value = $("perfVel").value; renderTudo(false); });
+$("velKt").addEventListener("input", () => { $("perfVel").value = $("velKt").value; });
+
+// Link do SimBrief com os dados da aba Detalhes do voo
+function linkSimbrief() {
+  if (sequencia.length < 2 || !sequencia[0].aeroporto || !sequencia[sequencia.length - 1].aeroporto) return "";
+  const a = sequencia[0], b = sequencia[sequencia.length - 1];
+  const meio = tokensRota.slice(1, -1).join(" ").replace(/^(DCT\s+)+/, "").replace(/(\s+DCT)+$/, "").trim();
+  const cia = $("fdCia").value.trim().toUpperCase(), num = $("fdNum").value.trim(), tipo = $("fdAeronave").value.trim().toUpperCase() || "A320";
+  let u = "https://dispatch.simbrief.com/options/custom?" + (cia ? "airline=" + encodeURIComponent(cia) + "&" : "") + (num ? "fltnum=" + encodeURIComponent(num) + "&" : "") +
+    "type=" + encodeURIComponent(tipo) + "&orig=" + a.ident + "&dest=" + b.ident;
+  const dt = /^(\d{4})-(\d{2})-(\d{2})$/.exec($("fdData").value.trim());
+  if (dt) u += "&date=" + dt[3] + MESES_SB[+dt[2] - 1] + dt[1].slice(2);
+  const hr = /^(\d{1,2}):(\d{2})$/.exec($("fdHora").value.trim());
+  if (hr) u += "&deph=" + hr[1].padStart(2, "0") + "&depm=" + hr[2];
+  const tmin = Math.round(sequencia._total / velocidadeAtual() * 60);
+  u += "&steh=" + Math.floor(tmin / 60) + "&stem=" + String(tmin % 60).padStart(2, "0");
+  if (meio) u += "&route=" + encodeURIComponent(meio);
+  return u;
+}
+
+// Atualiza as abas Desempenho, Detalhes do voo e Combustível e carga
+function atualizarExtras() {
+  const linhas = (rows) => rows.map(r => `<tr${r[2] ? ' class="tot"' : ""}><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
+  const tem = sequencia.length >= 2;
+  const vel = velocidadeAtual();
+  $("perfVel").value = $("velKt").value;
+  $("perfAlt").textContent = altCruzeiroTxt() || "-----";
+  const horas = tem ? sequencia._total / vel : 0;
+  const fmtH = h => Math.floor(Math.round(h * 60) / 60) + " h " + (Math.round(h * 60) % 60) + " min";
+  if (tem) {
+    const a = sequencia[0], b = sequencia[sequencia.length - 1];
+    const direta = distanciaNM(a.lat, a.lon, b.lat, b.lon);
+    $("perfTab").innerHTML = linhas([["Origem → destino", a.ident + " → " + b.ident], ["Distância direta", direta.toFixed(0) + " NM"],
+      ["Distância pela rota", sequencia._total.toFixed(0) + " NM"], ["Acréscimo", ((sequencia._total / direta - 1) * 100).toFixed(1) + "%"],
+      ["Tempo estimado", fmtH(horas), true]]);
+  } else $("perfTab").innerHTML = '<tr><td colspan="2" class="peq">Calcule uma rota primeiro.</td></tr>';
+
+  // Detalhes do voo: ETD e ETA em UTC
+  const hr = /^(\d{1,2}):(\d{2})$/.exec($("fdHora").value.trim());
+  let etd = "-----", eta = "-----";
+  if (hr && tem) {
+    const m0 = (+hr[1]) * 60 + (+hr[2]), m1 = (m0 + Math.round(horas * 60)) % 1440;
+    etd = String(hr[1]).padStart(2, "0") + ":" + hr[2] + " UTC";
+    eta = String(Math.floor(m1 / 60)).padStart(2, "0") + ":" + String(m1 % 60).padStart(2, "0") + " UTC" + (m0 + Math.round(horas * 60) >= 1440 ? " (+1 dia)" : "");
+  }
+  const cs = ($("fdCia").value.trim().toUpperCase() + $("fdNum").value.trim()) || "-----";
+  $("detTab").innerHTML = linhas([["Indicativo", cs], ["Aeronave", $("fdAeronave").value.trim().toUpperCase() || "-----"],
+    ["Rota", tem ? sequencia[0].ident + " → " + sequencia[sequencia.length - 1].ident : "-----"], ["Saída estimada", etd], ["Pouso estimado", eta, true]]);
+  const sb = linkSimbrief();
+  $("detLinks").innerHTML = sb ? `<a class="bt" target="_blank" href="${sb}">Abrir no SimBrief</a>` +
+    (cs !== "-----" ? `<a class="bt" target="_blank" href="https://www.flightradar24.com/data/flights/${encodeURIComponent(cs.toLowerCase())}">Rastrear no Flightradar24</a>` : "") : '<div class="peq">Calcule uma rota para gerar o link.</div>';
+
+  // Combustível e carga
+  const n = id => parseFloat($(id).value) || 0;
+  const consumo = n("cbConsumo");
+  const viagem = horas * consumo, conting = viagem * n("cbConting") / 100, altern = n("cbAltern") / 60 * consumo, reserva = n("cbReserva") / 60 * consumo, taxi = n("cbTaxi");
+  const total = viagem + conting + altern + reserva + taxi;
+  const carga = n("cbPax") * n("cbPesoPax") + n("cbCarga"), zfw = n("cbOew") + carga, tow = zfw + total - taxi;
+  const kg = v => Math.round(v).toLocaleString("pt-BR") + " kg";
+  $("cbTab").innerHTML = tem ? linhas([["Viagem", kg(viagem)], ["Contingência", kg(conting)], ["Alternativa", kg(altern)], ["Reserva final", kg(reserva)], ["Taxi", kg(taxi)],
+    ["Combustível total", kg(total), true], ["Carga paga", kg(carga)], ["ZFW", kg(zfw)], ["TOW", kg(tow), true]]) : '<tr><td colspan="2" class="peq">Calcule uma rota primeiro.</td></tr>';
+}
+
+// Menu de três pontos de cada linha da rota
+const menuLinha = document.createElement("div");
+menuLinha.id = "menuLinha";
+document.body.appendChild(menuLinha);
+function abrirMenuLinha(btn) {
+  const i = +btn.dataset.i, p = sequencia[i];
+  if (!p) return;
+  menuLinha.innerHTML = `<div data-a="centrar" data-i="${i}">Centralizar no mapa</div><div data-a="copiar" data-i="${i}">Copiar ${esc(p.ident)}</div><div data-a="cartas" data-i="${i}">Cartas do aeroporto</div>`.replace(p.aeroporto ? "" : /<div data-a="cartas"[^>]*>[^<]*<\/div>/, "");
+  const r = btn.getBoundingClientRect();
+  menuLinha.style.left = Math.min(r.left, window.innerWidth - 190) + "px"; menuLinha.style.top = (r.bottom + 2) + "px"; menuLinha.style.display = "block";
+}
+menuLinha.addEventListener("click", e => {
+  const d = e.target.closest("div[data-a]");
+  if (!d) return;
+  const p = sequencia[+d.dataset.i];
+  if (d.dataset.a === "centrar") centrarPonto(+d.dataset.i);
+  if (d.dataset.a === "copiar") navigator.clipboard && navigator.clipboard.writeText(p.ident);
+  if (d.dataset.a === "cartas") window.open(urlCartas(p.ident), "_blank");
+  menuLinha.style.display = "none";
+});
+document.addEventListener("click", e => { if (!e.target.closest("button.mais") && !e.target.closest("#menuLinha")) menuLinha.style.display = "none"; });
+
+// Caderno
+try { const c = localStorage.getItem("planejador_caderno"); if (c) $("caderno").value = c; } catch (e) { /* sem armazenamento */ }
+$("caderno").addEventListener("input", () => { try { localStorage.setItem("planejador_caderno", $("caderno").value); } catch (e) { /* sem armazenamento */ } });
+$("btnCadResumo").addEventListener("click", () => {
+  if (sequencia.length < 2) return;
+  const a = sequencia[0], b = sequencia[sequencia.length - 1];
+  const txt = `${a.ident} → ${b.ident}  ${fmtDist(sequencia._total)} NM  ${fmtTempo(sequencia._total / velocidadeAtual() * 60)}\nRota: ${tokensRota.join(" ")}\nCruzeiro: ${altCruzeiroTxt() || "-"}  Vel: ${Math.round(velocidadeAtual())} kt\n`;
+  $("caderno").value += ($("caderno").value && !$("caderno").value.endsWith("\n") ? "\n" : "") + txt;
+  $("caderno").dispatchEvent(new Event("input"));
+});
+$("btnCadCopiar").addEventListener("click", e => copiarTexto($("caderno").value, e.target));
+
+// Barra de ferramentas à direita do mapa
+const SVG = {
+  camadas: '<svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 16l9 5 9-5"/></svg>',
+  ajustar: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>',
+  regua: '<svg viewBox="0 0 24 24"><path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2"/></svg>',
+  busca: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg>'
+};
+const barraMapa = document.createElement("div");
+barraMapa.id = "ferramentas";
+barraMapa.innerHTML = `<button data-f="camadas" title="Camadas do mapa">${SVG.camadas}</button><button data-f="ajustar" title="Ajustar à rota">${SVG.ajustar}</button>` +
+  `<button data-f="regua" title="Medir distância (clique no mapa, duplo clique limpa)">${SVG.regua}</button><button data-f="busca" title="Buscar (Ctrl+K)">${SVG.busca}</button>`;
+$("mapa").appendChild(barraMapa);
+const popCamadas = document.createElement("div");
+popCamadas.id = "popCamadas";
+$("mapa").appendChild(popCamadas);
+L.DomEvent.disableClickPropagation(barraMapa); L.DomEvent.disableClickPropagation(popCamadas); L.DomEvent.disableScrollPropagation(popCamadas);
+function montarPopCamadas() {
+  popCamadas.innerHTML = '<h5>Fundo do mapa</h5>' + Object.keys(fundos).map(n => `<label><input type="radio" name="fundo" value="${esc(n)}"${n === fundoAtual ? " checked" : ""}> ${esc(n)}</label>`).join("") +
+    '<h5>Camadas</h5>' + `<label><input type="checkbox" id="pcAerovias"${$("verAerovias").checked ? " checked" : ""}> Aerovias</label><label><input type="checkbox" id="pcFixos"${$("verFixos").checked ? " checked" : ""}> Fixos</label>`;
+}
+popCamadas.addEventListener("change", e => {
+  if (e.target.name === "fundo") trocarFundo(e.target.value);
+  if (e.target.id === "pcAerovias") { $("verAerovias").checked = e.target.checked; aplicarCamadasNavdata(); }
+  if (e.target.id === "pcFixos") { $("verFixos").checked = e.target.checked; aplicarCamadasNavdata(); }
+});
+
+// Régua: clique para marcar pontos e ver a distância acumulada em NM
+const regua = { ativa: false, pts: [], camada: L.layerGroup().addTo(mapa) };
+function desenharRegua() {
+  regua.camada.clearLayers();
+  let tot = 0;
+  regua.pts.forEach((pt, i) => {
+    L.circleMarker(pt, { radius: 4, color: "#fff", weight: 2, fillColor: "#0074C0", fillOpacity: 1 }).addTo(regua.camada);
+    if (i > 0) {
+      const a = regua.pts[i - 1], d = distanciaNM(a.lat, a.lng, pt.lat, pt.lng); tot += d;
+      L.polyline([a, pt], { color: "#F37A19", weight: 3, dashArray: "6 5" }).addTo(regua.camada);
+      L.marker(pt, { icon: L.divIcon({ className: "", html: `<div class="rot-regua" style="transform:translate(8px,-24px)">${d.toFixed(1)} NM · ${fmtRumo(rumoInicial({ lat: a.lat, lon: a.lng }, { lat: pt.lat, lon: pt.lng }))} (total ${tot.toFixed(1)})</div>`, iconSize: [0, 0] }), interactive: false }).addTo(regua.camada);
+    }
+  });
+}
+mapa.on("click", e => { if (!regua.ativa) return; regua.pts.push(e.latlng); desenharRegua(); });
+mapa.on("dblclick", () => { if (regua.ativa) { regua.pts = []; desenharRegua(); } });
+barraMapa.addEventListener("click", e => {
+  const b = e.target.closest("button[data-f]");
+  if (!b) return;
+  const f = b.dataset.f;
+  if (f === "camadas") { montarPopCamadas(); popCamadas.style.display = popCamadas.style.display === "block" ? "none" : "block"; b.classList.toggle("ativo", popCamadas.style.display === "block"); }
+  if (f === "ajustar") ajustarVista();
+  if (f === "regua") {
+    regua.ativa = !regua.ativa; b.classList.toggle("ativo", regua.ativa);
+    mapa.getContainer().classList.toggle("regua", regua.ativa);
+    if (regua.ativa) mapa.doubleClickZoom.disable(); else { mapa.doubleClickZoom.enable(); regua.pts = []; desenharRegua(); }
+  }
+  if (f === "busca") { $("campoBusca").focus(); $("campoBusca").select(); }
+});
+renderRecentes();
+atualizarExtras();
 
 // ====== Eventos da carta ======
 mapa.on("zoomend viewreset moveend", posicionarCarta);
