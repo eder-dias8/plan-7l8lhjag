@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velocidades de Decolagem | A320neo e A330-200</title>
+<style>
+:root{--azul:#0074C0;--laranja:#F37A19;--cinza:#95AFB6;--fundo:#f4f7f9;--texto:#1d2b33}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--fundo);color:var(--texto)}
+header{background:var(--azul);color:#fff;padding:14px 20px}
+header h1{margin:0;font-size:20px}
+header p{margin:4px 0 0;font-size:13px;opacity:.9}
+main{max-width:1000px;margin:0 auto;padding:16px}
+.abas{display:flex;gap:6px;margin-bottom:12px}
+.aba{padding:10px 18px;border:1px solid var(--cinza);background:#fff;cursor:pointer;border-radius:6px 6px 0 0;font-weight:600;color:var(--cinza)}
+.aba.ativa{background:var(--azul);color:#fff;border-color:var(--azul)}
+.cartao{background:#fff;border:1px solid #dbe5e9;border-radius:8px;padding:14px;margin-bottom:14px}
+.cartao h2{margin:0 0 10px;font-size:15px;color:var(--azul)}
+label{font-size:12px;color:#5b6b73;display:block;margin-bottom:3px}
+input[type=text],input[type=number],textarea{width:100%;padding:7px;border:1px solid var(--cinza);border-radius:4px;font-size:14px}
+textarea{height:80px;font-family:Consolas,monospace;font-size:12px}
+.linha{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.linha>div{flex:1;min-width:130px}
+button{background:var(--azul);color:#fff;border:0;padding:8px 14px;border-radius:4px;cursor:pointer;font-size:14px}
+button.sec{background:#fff;color:var(--azul);border:1px solid var(--azul)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--azul);color:#fff;text-align:center;padding:7px}
+td{padding:7px;text-align:center;border-bottom:1px solid #e3ebee}
+td.v{font-size:20px;font-weight:700;color:var(--azul)}
+.aviso{background:#fff4ea;border-left:4px solid var(--laranja);padding:9px 12px;font-size:13px;margin:8px 0}
+.erro{background:#fdecea;border-left:4px solid #c62828;padding:9px 12px;font-size:13px;margin:8px 0}
+.ok{background:#eaf5fb;border-left:4px solid var(--azul);padding:9px 12px;font-size:13px;margin:8px 0}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.kv div{background:var(--fundo);padding:8px;border-radius:4px;font-size:13px}
+.kv b{display:block;font-size:15px;color:var(--azul)}
+.sel{display:inline-block;background:var(--laranja);color:#fff;font-size:11px;padding:1px 6px;border-radius:8px;margin-left:4px}
+pre{background:#10222c;color:#d9ecf5;padding:10px;border-radius:6px;font-size:12px;white-space:pre-wrap}
+small{color:#5b6b73}
+.oculto{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>Velocidades de Decolagem a partir do plano do SimBrief</h1>
+  <p>A320neo (A20N) e iniBuilds A330-200 (A332). Uso apenas em simulador, não operacional.</p>
+</header>
+<main>
+  <div class="abas" id="abas"></div>
+
+  <div class="cartao">
+    <h2>1. Carregar o plano de voo (OFP) do SimBrief</h2>
+    <div class="linha">
+      <div><label>Arquivo do OFP (JSON v2 ou XML)</label><input type="file" id="arquivo" accept=".json,.xml,.txt"></div>
+      <div><label>Ou usuário público do SimBrief (busca o último plano)</label><input type="text" id="alias" placeholder="seu usuário SimBrief"></div>
+      <div style="flex:0"><button id="btnBuscar">Buscar</button></div>
+    </div>
+    <label style="margin-top:10px">Ou cole o conteúdo do OFP aqui</label>
+    <textarea id="colar" placeholder="Cole o JSON ou XML do OFP"></textarea>
+    <div style="margin-top:6px"><button class="sec" id="btnColar">Ler texto colado</button></div>
+    <div id="msg"></div>
+  </div>
+
+  <div id="resultado" class="oculto"></div>
+
+  <div class="cartao">
+    <h2>Estimativa por peso (usada só se o OFP não trouxer o bloco TLR)</h2>
+    <small>Digite uma referência vinda do EFB da aeronave (mesmos flap e condições do seu voo). A ferramenta escala por V ∝ √(peso). Nenhum valor padrão é inventado.</small>
+    <div class="linha" style="margin-top:8px">
+      <div><label>Peso de referência (kg)</label><input type="number" id="refPeso"></div>
+      <div><label>V1 ref (kt)</label><input type="number" id="refV1"></div>
+      <div><label>VR ref (kt)</label><input type="number" id="refVR"></div>
+      <div><label>V2 ref (kt)</label><input type="number" id="refV2"></div>
+      <div style="flex:0"><button class="sec" id="btnSalvar">Salvar</button></div>
+    </div>
+  </div>
+
+  <div class="cartao">
+    <h2>Memória de cálculo</h2>
+    <pre id="memoria">Carregue um OFP para ver a memória de cálculo.</pre>
+  </div>
+</main>
+
+<script>
+// ===== Configuração das aeronaves =====
+const AERONAVES = {
+  A20N: {rotulo: "Airbus A320neo", tipos: ["A20N"]},
+  A332: {rotulo: "iniBuilds A330-200", tipos: ["A332","A330","A333"]}
+};
+let abaAtual = "A20N";
+let ultimoOfp = null;
+
+// ===== Utilitários =====
+const $ = id => document.getElementById(id);
+function mostrarMsg(tipo, texto){ $("msg").innerHTML = '<div class="'+tipo+'">'+texto+'</div>'; }
+
+// Converte XML em objeto simples (elementos repetidos viram lista)
+function xmlParaObjeto(no){
+  const filhos = Array.from(no.children);
+  if(!filhos.length) return no.textContent.trim();
+  const obj = {};
+  filhos.forEach(f=>{
+    const v = xmlParaObjeto(f);
+    if(f.tagName in obj){
+      if(!Array.isArray(obj[f.tagName])) obj[f.tagName] = [obj[f.tagName]];
+      obj[f.tagName].push(v);
+    } else obj[f.tagName] = v;
+  });
+  return obj;
+}
+
+// Lê texto e devolve o OFP como objeto (JSON ou XML)
+function lerOfp(texto){
+  const t = texto.trim();
+  if(t.startsWith("{")) return JSON.parse(t);
+  const doc = new DOMParser().parseFromString(t,"application/xml");
+  if(doc.querySelector("parsererror")) throw new Error("Arquivo não é JSON nem XML válido.");
+  return xmlParaObjeto(doc.documentElement);
+}
+
+// Garante lista (objeto único vira lista de 1)
+const lista = x => x==null ? [] : (Array.isArray(x)? x : [x]);
+// Pega o primeiro campo existente
+function pegar(o,...chaves){ for(const c of chaves){ if(o && o[c]!==undefined && o[c]!=="") return o[c]; } return null; }
+// Número a partir de texto
+const num = x => (x===null||x===undefined||x==="")? null : (isFinite(parseFloat(x))? parseFloat(x): null);
+
+// Extrai V1/VR/V2 de um registro de pista, tolerando formato plano ou aninhado
+function extrairVelocidades(r){
+  const aninhado = r.speeds || r.velocidades || {};
+  return {
+    v1: num(pegar(r,"speeds_v1")  ?? pegar(aninhado,"v1")),
+    vr: num(pegar(r,"speeds_vr")  ?? pegar(aninhado,"vr")),
+    v2: num(pegar(r,"speeds_v2")  ?? pegar(aninhado,"v2")),
+    outra: num(pegar(r,"speeds_other")),
+    outraId: pegar(r,"speeds_other_id")
+  };
+}
+
+// Converte peso para kg conforme a unidade do OFP
+function paraKg(valor, unidade){
+  const n = num(valor); if(n===null) return null;
+  return (String(unidade||"").toLowerCase().startsWith("lb")) ? n*0.45359237 : n;
+}
+
+// ===== Processamento principal =====
+function processar(ofp){
+  ultimoOfp = ofp;
+  const aviso = [];
+  const tipo = (ofp.aircraft && (ofp.aircraft.icao_code||ofp.aircraft.base_type)) || "?";
+  const esperado = AERONAVES[abaAtual].tipos;
+  if(!esperado.includes(String(tipo).toUpperCase()))
+    aviso.push('Aeronave do OFP é <b>'+tipo+'</b>, mas a aba escolhida é '+AERONAVES[abaAtual].rotulo+'. Confira se escolheu a aba certa.');
+
+  const unidade = ofp.params && ofp.params.units || "kg";
+  const w = ofp.weights || {};
+  const g = ofp.general || {};
+  const origem = ofp.origin || {}, dest = ofp.destination || {};
+  const tow = paraKg(w.est_tow, unidade);
+
+  let html = '';
+  if(aviso.length) html += aviso.map(a=>'<div class="aviso">'+a+'</div>').join('');
+
+  html += '<div class="cartao"><h2>Voo</h2><div class="kv">'
+    +'<div>Rota<b>'+(origem.icao_code||"?")+' → '+(dest.icao_code||"?")+'</b></div>'
+    +'<div>Voo<b>'+((g.icao_airline||"")+(g.flight_number||"")||"-")+'</b></div>'
+    +'<div>Aeronave<b>'+tipo+'</b></div>'
+    +'<div>TOW planejado<b>'+(w.est_tow||"-")+' '+unidade+'</b></div>'
+    +'<div>ZFW<b>'+(w.est_zfw||"-")+' '+unidade+'</b></div>'
+    +'<div>LDW<b>'+(w.est_ldw||"-")+' '+unidade+'</b></div>'
+    +'</div></div>';
+
+  // Bloco de decolagem do TLR
+  const tlr = ofp.tlr || null;
+  const dec = tlr && (tlr.takeoff || tlr.decolagem) || null;
+  const pistas = dec ? lista(dec.runway) : [];
+  let memoria = "FONTE: ";
+  let achouTlr = false;
+
+  if(pistas.length){
+    const cond = dec.conditions || {};
+    html += '<div class="cartao"><h2>Decolagem (calculada pelo SimBrief, bloco TLR)</h2>';
+    html += '<div class="kv">'
+      +'<div>Pista planejada<b>'+(cond.planned_runway||"-")+'</b></div>'
+      +'<div>Peso usado<b>'+(cond.planned_weight||"-")+'</b></div>'
+      +'<div>Vento<b>'+(cond.wind||"-")+'</b></div>'
+      +'<div>Temperatura<b>'+(cond.temperature||"-")+'</b></div>'
+      +'<div>QNH<b>'+(cond.altimeter||"-")+'</b></div>'
+      +'<div>Superfície<b>'+(cond.surface_condition||"-")+'</b></div></div>';
+    html += '<table style="margin-top:10px"><tr><th>Pista</th><th>Flap</th><th>Empuxo</th><th>Flex °C</th><th>Peso máx.</th><th>V1</th><th>VR</th><th>V2</th><th>Outra</th></tr>';
+    pistas.forEach(r=>{
+      const v = extrairVelocidades(r);
+      const planejada = String(r.identifier||r.name||"")===String(cond.planned_runway||"");
+      html += '<tr><td>'+(r.identifier||r.name||"-")+(planejada?'<span class="sel">plano</span>':'')+'</td>'
+        +'<td>'+(r.flap_setting||"-")+'</td><td>'+(r.thrust_setting||"-")+'</td><td>'+(r.flex_temperature||"-")+'</td>'
+        +'<td>'+(r.max_weight||"-")+'</td>'
+        +'<td class="v">'+(v.v1??"-")+'</td><td class="v">'+(v.vr??"-")+'</td><td class="v">'+(v.v2??"-")+'</td>'
+        +'<td>'+(v.outra!==null? v.outra+(v.outraId?' ('+v.outraId+')':''):"-")+'</td></tr>';
+    });
+    html += '</table><small>"Outra" é o campo speeds_other do SimBrief (identificado por speeds_other_id). Se o que você chama de V3 for a velocidade de rotação, use a coluna VR.</small></div>';
+    achouTlr = pistas.some(r=>extrairVelocidades(r).v1!==null);
+    memoria += "bloco tlr.takeoff do OFP do SimBrief ("+pistas.length+" linha(s) de pista).\n"
+      +"V1, VR e V2 são lidos diretamente do OFP, sem cálculo local.\n"
+      +"Campos: speeds_v1, speeds_vr, speeds_v2, flap_setting, thrust_setting, flex_temperature.\n"
+      +"Exemplo: V1 = valor de speeds_v1 na linha da pista planejada ("+(cond.planned_runway||"?")+").\n";
+  }
+
+  // Pouso (Vref)
+  const pouso = tlr && (tlr.landing||null);
+  if(pouso){
+    const pl = lista(pouso.runway);
+    const linhas = [];
+    pl.forEach(r=>{
+      ["distance_dry","distance_wet"].forEach(k=>{
+        const d = r[k]; if(d && (d.speeds_vref||d.flap_setting))
+          linhas.push('<tr><td>'+(r.identifier||r.name||"-")+'</td><td>'+(k==="distance_dry"?"Seca":"Molhada")+'</td><td>'+(d.flap_setting||"-")+'</td><td class="v">'+(d.speeds_vref||"-")+'</td></tr>');
+      });
+    });
+    if(linhas.length)
+      html += '<div class="cartao"><h2>Pouso (Vref, bloco TLR)</h2><table><tr><th>Pista</th><th>Condição</th><th>Flap</th><th>Vref</th></tr>'+linhas.join("")+'</table></div>';
+  }
+
+  // Fallback por peso
+  if(!achouTlr){
+    html += '<div class="aviso"><b>Este OFP não traz velocidades de decolagem (bloco TLR ausente ou vazio).</b> No SimBrief, ative o cálculo de performance de decolagem/pouso na tela de geração do plano (disponível para aeronaves e pistas suportadas) e gere o plano de novo.</div>';
+    const r = lerReferencia();
+    if(r.peso && r.v1 && r.vr && r.v2 && tow){
+      const fator = Math.sqrt(tow/r.peso);
+      const e1 = Math.round(r.v1*fator), er = Math.round(r.vr*fator);
+      const e2 = Math.max(Math.round(r.v2*fator), er);
+      const e1c = Math.min(e1, er);
+      html += '<div class="cartao"><h2>Estimativa por peso (NÃO operacional)</h2><table><tr><th>TOW (kg)</th><th>V1</th><th>VR</th><th>V2</th></tr>'
+        +'<tr><td>'+Math.round(tow)+'</td><td class="v">'+e1c+'</td><td class="v">'+er+'</td><td class="v">'+e2+'</td></tr></table>'
+        +'<div class="aviso">Escala simples por √peso a partir da sua referência. Não considera flap diferente, empuxo reduzido, pista, vento, temperatura nem CG. Use o EFB da aeronave para o valor correto.</div></div>';
+      memoria += "estimativa local por escala de peso (sem TLR).\n"
+        +"fator = √(TOW / peso_ref) = √("+Math.round(tow)+" / "+r.peso+") = "+fator.toFixed(4)+"\n"
+        +"V1 = "+r.v1+" × "+fator.toFixed(4)+" = "+e1+" (limitado a VR: "+e1c+")\n"
+        +"VR = "+r.vr+" × "+fator.toFixed(4)+" = "+er+"\n"
+        +"V2 = "+r.v2+" × "+fator.toFixed(4)+" = "+e2+" (mínimo VR)\n";
+    } else {
+      html += '<div class="ok">Para a estimativa, preencha a referência abaixo (peso, V1, VR, V2 do EFB) e salve. Também é preciso que o OFP tenha o TOW.</div>';
+      memoria += "sem TLR e sem referência preenchida: nenhuma velocidade calculada.\n";
+    }
+  }
+
+  memoria += "\nUnidade de peso do OFP: "+unidade+(unidade.toLowerCase().startsWith("lb")?" (convertido para kg ×0,45359237)":"")+".\n"
+    +"Filtros/regras: V1 ≤ VR ≤ V2 aplicado apenas na estimativa. Período: plano atual do SimBrief.\n"
+    +"Meta/critério de cor: azul = velocidade lida/calculada, laranja = aviso.\n"
+    +"Uso restrito a simulador.";
+  $("resultado").innerHTML = html;
+  $("resultado").classList.remove("oculto");
+  $("memoria").textContent = memoria;
+  mostrarMsg("ok","Plano lido: "+(origem.icao_code||"?")+" → "+(dest.icao_code||"?")+", aeronave "+tipo+".");
+}
+
+// ===== Referência por aeronave (localStorage) =====
+function chaveRef(){ return "vel_ref_"+abaAtual; }
+function lerReferencia(){
+  try{ const r = JSON.parse(localStorage.getItem(chaveRef())||"{}"); return {peso:+r.peso||0,v1:+r.v1||0,vr:+r.vr||0,v2:+r.v2||0}; }
+  catch(e){ return {peso:0,v1:0,vr:0,v2:0}; }
+}
+function carregarReferenciaNaTela(){
+  const r = lerReferencia();
+  $("refPeso").value = r.peso||""; $("refV1").value = r.v1||""; $("refVR").value = r.vr||""; $("refV2").value = r.v2||"";
+}
+$("btnSalvar").onclick = ()=>{
+  try{ localStorage.setItem(chaveRef(), JSON.stringify({peso:$("refPeso").value,v1:$("refV1").value,vr:$("refVR").value,v2:$("refV2").value})); }catch(e){}
+  if(ultimoOfp) processar(ultimoOfp);
+};
+
+// ===== Abas =====
+function montarAbas(){
+  $("abas").innerHTML = "";
+  Object.keys(AERONAVES).forEach(k=>{
+    const d = document.createElement("div");
+    d.className = "aba"+(k===abaAtual?" ativa":"");
+    d.textContent = AERONAVES[k].rotulo;
+    d.onclick = ()=>{ abaAtual = k; montarAbas(); carregarReferenciaNaTela(); if(ultimoOfp) processar(ultimoOfp); };
+    $("abas").appendChild(d);
+  });
+}
+
+// ===== Entradas =====
+function tentar(texto){
+  try{ processar(lerOfp(texto)); }
+  catch(e){ mostrarMsg("erro","Não consegui ler o OFP: "+e.message); }
+}
+$("arquivo").onchange = ev=>{
+  const f = ev.target.files[0]; if(!f) return;
+  const fr = new FileReader(); fr.onload = ()=>tentar(fr.result); fr.readAsText(f);
+};
+$("btnColar").onclick = ()=>tentar($("colar").value);
+$("btnBuscar").onclick = async ()=>{
+  const a = $("alias").value.trim(); if(!a){ mostrarMsg("erro","Informe o usuário do SimBrief."); return; }
+  try{
+    const resp = await fetch("https://www.simbrief.com/api/xml.fetcher.php?username="+encodeURIComponent(a)+"&json=v2");
+    if(!resp.ok) throw new Error("HTTP "+resp.status);
+    processar(JSON.parse(await resp.text()));
+  }catch(e){
+    mostrarMsg("erro","Busca direta falhou ("+e.message+"). O navegador pode bloquear a chamada. Baixe o OFP em JSON no SimBrief e use o campo de arquivo.");
+  }
+};
+
+montarAbas();
+carregarReferenciaNaTela();
+</script>
+</body>
+</html>
